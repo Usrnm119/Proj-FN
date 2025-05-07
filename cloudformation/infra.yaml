@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: EC2 Instance & S3 Bucket
+Parameters:
+  InstanceType:
+    Type: String
+    Default: t2.micro
+  AmiId:
+    Type: AWS::EC2::Image::Id
+    Default: ami-0123456789abcdef0
+Resources:
+  AppServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref InstanceType
+      ImageId: !Ref AmiId
+      IamInstanceProfile: LabInstanceProfile
+      Tags:
+        - Key: Name
+          Value: devops-demo-app
+  ArtifactsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${AWS::StackName}-artifacts"
+      VersioningConfiguration:
+        Status: Enabled
+Outputs:
+  InstanceId:
+    Description: EC2 Instance ID
+    Value: !Ref AppServer
+  BucketName:
+    Description: Artifacts Bucket
+    Value: !Ref ArtifactsBucket
