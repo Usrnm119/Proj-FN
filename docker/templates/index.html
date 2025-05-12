@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeBron James API</title>
+    <script>
+        async function fetchPlays() {
+            const response = await fetch('/plays');
+            const data = await response.json();
+            document.getElementById('plays').textContent = JSON.stringify(data, null, 2);
+        }
+
+        async function fetchPlay(id) {
+            const response = await fetch(`/plays/${id}`);
+            const data = await response.json();
+            document.getElementById('play').textContent = JSON.stringify(data, null, 2);
+        }
+
+        async function createPlay() {
+            const type = document.getElementById('playType').value;
+            const description = document.getElementById('playDescription').value;
+            const response = await fetch('/plays', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ type, description })
+            });
+            const data = await response.json();
+            document.getElementById('newPlay').textContent = JSON.stringify(data, null, 2);
+        }
+
+        async function updatePlay(id) {
+            const type = document.getElementById('updatePlayType').value;
+            const description = document.getElementById('updatePlayDescription').value;
+
+            const response = await fetch(`/plays/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ type, description })
+            });
+            const data = await response.json();
+            document.getElementById('updatedPlay').textContent = JSON.stringify(data, null, 2);
+        }
+        async function deletePlay(id){
+            const response = await fetch(`/plays/${id}`,{
+                method: 'DELETE',
+            });
+            document.getElementById('deletedPlay').textContent = "Deleted";
+        }
+
+        async function fetchLebronFact() {
+            const response = await fetch('/lebron');
+            const data = await response.json();
+            document.getElementById('lebronFact').textContent = data.lebron_fact;
+        }
+    </script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color:#f4f4f4;
+      }
+      .container{
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      h1 {
+        text-align: center;
+      }
+      #plays, #play, #newPlay, #updatedPlay, #deletedPlay, #lebronFact {
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: #e9e9e9;
+        border-radius: 5px;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+      label {
+        display: block;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      input[type="text"]{
+        width: 100%;
+        padding: 8px 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      button {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-right: 10px;
+      }
+      button:hover{
+        background-color: #0056b3;
+      }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>LeBron James API</h1>
+
+        <h2>Get All Plays</h2>
+        <button onclick="fetchPlays()">Fetch Plays</button>
+        <div id="plays"></div>
+
+        <h2>Get Play by ID</h2>
+        <label for="playId">Enter Play ID:</label>
+        <input type="text" id="playId" value="1">
+        <button onclick="fetchPlay(document.getElementById('playId').value)">Fetch Play</button>
+        <div id="play"></div>
+
+        <h2>Create Play</h2>
+        <label for="playType">Play Type:</label>
+        <input type="text" id="playType" value="dunk">
+        <label for="playDescription">Play Description:</label>
+        <input type="text" id="playDescription" value="New Dunk">
+        <button onclick="createPlay()">Create Play</button>
+        <div id="newPlay"></div>
+
+        <h2>Update Play</h2>
+         <label for="updatePlayId">Enter Play ID:</label>
+        <input type="text" id="updatePlayId" value="1">
+        <label for="updatePlayType">Play Type:</label>
+        <input type="text" id="updatePlayType" value="assist">
+        <label for="updatePlayDescription">Play Description:</label>
+        <input type="text" id="updatePlayDescription" value="Great Assist">
+        <button onclick="updatePlay(document.getElementById('updatePlayId').value)">Update Play</button>
+        <div id="updatedPlay"></div>
+
+        <h2>Delete Play</h2>
+        <label for="deletePlayId">Enter Play ID:</label>
+        <input type="text" id="deletePlayId" value="1">
+        <button onclick="deletePlay(document.getElementById('deletePlayId').value)">Delete Play</button>
+        <div id="deletedPlay"></div>
+
+        <h2>Get LeBron Fact</h2>
+        <button onclick="fetchLebronFact()">Fetch LeBron Fact</button>
+        <div id="lebronFact"></div>
+    </div>
+</body>
+</html>
+

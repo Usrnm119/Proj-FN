@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 import random
 from datetime import datetime
 
@@ -17,6 +17,13 @@ lebron_facts = [
     "LeBron’s real name is LeBron Raymone James Sr.",
     "\"I’m coming home.\" – The Decision, 2010."
 ]
+
+@app.route('/')
+def index():
+    """
+    Renders a simple HTML page to interact with the API.
+    """
+    return render_template('index.html')
 
 @app.route('/plays', methods=['GET'])
 def get_plays():
@@ -68,5 +75,4 @@ def lebron():
     return jsonify({"lebron_fact": fact}), 200
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=4000, debug=True)
-
+    app.run(host='localhost', port=5000, debug=True)
